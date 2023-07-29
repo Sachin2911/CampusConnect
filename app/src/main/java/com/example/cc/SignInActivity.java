@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.FirebaseApp;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -33,6 +34,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        mAuth = FirebaseAuth.getInstance();
 
         // Initialize UI elements
         emailEditText = findViewById(R.id.emailEditText);
@@ -67,7 +69,8 @@ public class SignInActivity extends AppCompatActivity {
 
         // Validate the input (you can add more validation as per your requirements)
         if (email.isEmpty() || password.isEmpty()) {
-            Toast.makeText(this, "Please fill in all fields.", Toast.LENGTH_SHORT).show();
+            progressBar.setVisibility(View.GONE);
+            Toast.makeText(this, "Please fill in all fields. 🥹", Toast.LENGTH_SHORT).show();
             return;
         }
 
@@ -77,20 +80,17 @@ public class SignInActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         progressBar.setVisibility(View.GONE);
                         if (task.isSuccessful()) {
-                            Toast.makeText(SignInActivity.this, "Login successful for email: " + email, Toast.LENGTH_LONG).show();
+                            Toast.makeText(SignInActivity.this, "You have logged in successfully. 🥳", Toast.LENGTH_LONG).show();
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
                             finish();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast.makeText(SignInActivity.this, "Authentication failed.",
+                            Toast.makeText(SignInActivity.this, "Authentication failed.😱",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
 
-        // You can now perform your login logic here
-        // For demonstration purposes, we'll just show a success message
-        Toast.makeText(this, "Login successful for email: " + email, Toast.LENGTH_LONG).show();
     }
 }

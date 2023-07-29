@@ -45,7 +45,6 @@
         android:textStyle="bold"
         android:textColor="#0099cc"
         android:layout_marginTop="30dp"
-        android:onClick="onLoginButtonClick"
         />
 
 

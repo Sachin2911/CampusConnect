@@ -39,23 +39,25 @@
             android:minWidth="48dp"
             android:minHeight="48dp"
             android:layout_weight="1"
-            android:id="@+id/edtName"
+            android:id="@+id/firstNameEditText"
             android:layout_marginBottom="20dp"/>
         <EditText
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="Last Name"
             android:hint="Last Name"
+            android:gravity="center"
+            android:layout_gravity=""
             android:textColor="@color/white"
             android:padding="5dp"
+            android:layout_marginEnd="25dp"
+            android:textColorHint="@color/white"
             android:background="@drawable/input_bg"
             android:drawablePadding="20dp"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            android:layout_marginEnd="25dp"
-            android:id="@+id/edtSurname"
-            android:layout_weight="1"/>
+            android:layout_weight="1"
+            android:id="@+id/lastNameEditText"
+            android:layout_marginBottom="20dp"/>
     </LinearLayout>
 
     <LinearLayout
@@ -74,7 +76,7 @@
             android:textColorHint="@color/white"
             android:minWidth="48dp"
             android:minHeight="48dp"
-            android:id="@+id/edtDgr"
+            android:id="@+id/degreeEditText"
             android:layout_gravity="center_horizontal"/>
 
     </LinearLayout>

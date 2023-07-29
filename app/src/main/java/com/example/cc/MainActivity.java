@@ -22,12 +22,21 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.register);
+        setContentView(R.layout.activity_main);
 
         mAuth = FirebaseAuth.getInstance();
         details = findViewById(R.id.detailsTextview);
         logoutButton = findViewById(R.id.logOut);
         user = mAuth.getCurrentUser();
+
+//        logoutButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View view) {
+//                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+//                startActivity(intent);
+//                finish();
+//            }
+//        });
 
         if (user == null){
             Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
@@ -38,15 +47,15 @@ public class MainActivity extends AppCompatActivity {
             user.getEmail();
         }
 
-//        logoutButton.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                FirebaseAuth.getInstance().signOut();
-//                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
-//                startActivity(intent);
-//                finish();
-//            }
-//        });
+        logoutButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                startActivity(intent);
+                finish();
+            }
+        });
 
     }
 }
