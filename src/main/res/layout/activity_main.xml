@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:padding="50dp"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="30sp"
+        android:text="LOGIN FORM"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_gravity="center_horizontal"
+
+        />
+    <EditText
+        android:id="@+id/txtLogEmail"
+        android:background="@drawable/input_bg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email Address"
+        android:textColor="@color/white"
+        android:padding="15dp"
+        android:drawablePadding="20dp"
+        android:drawableLeft="@drawable/baseline_person_24"
+        android:textColorHint="@color/white"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:layout_marginTop="50dp"
+
+        />
+    <EditText
+        android:id="@+id/edtLogPassword"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Password"
+        android:textColor="@color/white"
+        android:background="@drawable/input_bg"
+        android:padding="15dp"
+        android:drawablePadding="20dp"
+        android:drawableLeft="@drawable/baseline_info_24"
+        android:textColorHint="@color/white"
+        android:minHeight="48dp"
+        android:minWidth="48dp"
+        android:layout_marginTop="40dp"
+        android:inputType="textPassword"
+        />
+    <Button
+        android:id="@+id/btnLogEnter"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="LOGIN"
+        android:backgroundTint="@color/white"
+        android:textStyle="bold"
+        android:textColor="#0099cc"
+        android:layout_marginTop="30dp"
+        android:onClick="onLoginButtonClick"
+        />
+    <TextView
+        android:id="@+id/txtCreateAccount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:text="Don't have an account? Sign up"
+        android:textColor="#0099cc"
+        android:textStyle="bold"
+        android:textSize="15sp"
+        android:layout_marginTop="30dp"
+        android:layout_gravity="center_horizontal"
+        android:onClick="onregiclick"
+        />
+
+
+</LinearLayout>
