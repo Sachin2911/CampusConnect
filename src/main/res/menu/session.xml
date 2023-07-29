@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:ignore="HardcodedText">
+
+    <item
+        android:id="@+id/nav_account"
+        android:title="Profile"
+        android:icon="@drawable/baseline_person_24"/>
+
+    <item
+        android:id="@+id/nav_settings"
+        android:title="Find Session"
+        android:icon="@drawable/baseline_person_search"/>
+
+    <item
+        android:id="@+id/nav_groups"
+        android:title="Study Groups"
+        android:icon="@drawable/baseline_group"/>
+
+    <item
+        android:id="@+id/nav_logout"
+        android:title="Logout"
+        android:icon="@drawable/baseline_exit_to_app_24"/>
+
+</menu>
