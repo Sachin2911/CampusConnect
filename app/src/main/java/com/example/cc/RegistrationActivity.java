@@ -1,7 +1,10 @@
 package com.example.cc;
 
+import static android.content.ContentValues.TAG;
+
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -15,12 +18,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegistrationActivity extends AppCompatActivity {
 
@@ -36,16 +42,22 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
+    private FirebaseFirestore firestoreDB;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.register);
 
+
+        // Initialize Firestore
+        firestoreDB = FirebaseFirestore.getInstance();
+
         // Initialize FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
 
         // Initialize FirebaseDatabase
-        databaseReference = FirebaseDatabase.getInstance().getReference("users");
+        //databaseReference = FirebaseDatabase.getInstance().getReference("users");
 
         // Initialize UI elements
         firstNameEditText = findViewById(R.id.firstNameEditText);
@@ -84,7 +96,6 @@ public class RegistrationActivity extends AppCompatActivity {
         String firstName = firstNameEditText.getText().toString().trim();
         String lastName = lastNameEditText.getText().toString().trim();
         String degree = degreeEditText.getText().toString().trim();
-//        String yearOfStudy = ((RadioButton) findViewById(radGender.getCheckedRadioButtonId())).getText().toString();
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
@@ -101,7 +112,7 @@ public class RegistrationActivity extends AppCompatActivity {
         String yearOfStudy = selectedRadioButton.getText().toString();
 
         // Validate the input (you can add more validation as per your requirements)
-        if (email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || degree.isEmpty() || yearOfStudy.isEmpty() ) {
+        if (email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || degree.isEmpty() || yearOfStudy.isEmpty()) {
             progressBar.setVisibility(View.GONE);
             Toast.makeText(this, "Please fill in all fields. 🥹", Toast.LENGTH_SHORT).show();
             return;
@@ -122,26 +133,24 @@ public class RegistrationActivity extends AppCompatActivity {
                                 // Create a User object
                                 User userData = new User(userId, firstName, lastName, degree, yearOfStudy, email);
 
-                                // Save the User object to Firebase Realtime Database
-                                databaseReference.child(userId).setValue(userData);
-                                Toast.makeText(RegistrationActivity.this, "You have registered successfully. 🥳", Toast.LENGTH_LONG).show();
-                                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
-                                startActivity(intent);
-                                finish();
-//                                        .addOnCompleteListener(new OnCompleteListener<Void>() {
-//                                            @Override
-//                                            public void onComplete(@NonNull Task<Void> setValueTask) {
-//                                                if (setValueTask.isSuccessful()) {
-//                                                    System.out.println("Hello there");
-//                                                    Toast.makeText(RegistrationActivity.this, "You have registered successfully. 🥳", Toast.LENGTH_LONG).show();
-//                                                    Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
-//                                                    startActivity(intent);
-//                                                    finish();
-//                                                } else {
-//                                                    Toast.makeText(RegistrationActivity.this, "Registration failed. Please try again.😖", Toast.LENGTH_SHORT).show();
-//                                                }
-//                                            }
-//                                        });
+                                // Storing data in Firestore
+                                firestoreDB.collection("users").document(userId).set(userData)
+                                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                            @Override
+                                            public void onSuccess(Void aVoid) {
+                                                Log.d(TAG, "Document added with ID: " + userId);
+                                                Toast.makeText(RegistrationActivity.this, "You have registered successfully. 🥳", Toast.LENGTH_LONG).show();
+                                                Intent intent = new Intent(getApplicationContext(), SignInActivity.class);
+                                                startActivity(intent);
+                                                finish();
+                                            }
+                                        })
+                                        .addOnFailureListener(new OnFailureListener() {
+                                            @Override
+                                            public void onFailure(@NonNull Exception e) {
+                                                Toast.makeText(RegistrationActivity.this, "Registration failed. Please try again.😖", Toast.LENGTH_SHORT).show();
+                                            }
+                                        });
                             }
                         } else {
                             // If sign in fails, display a message to the user.
@@ -150,5 +159,6 @@ public class RegistrationActivity extends AppCompatActivity {
                     }
                 });
     }
+
 
 }
