@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:campusconectv2/reusable_wdgets/reusable_widget.dart';
@@ -148,24 +150,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         );
                       },
                     );
-                    return; // Stop execution of the sign-up logic
+                    return;
                   }
-                  // Creating the firebase user
                   FirebaseAuth.instance
                       .createUserWithEmailAndPassword(
                           email: _emailTextController.text,
                           password: _passwordTextController.text)
                       .then((value) {
-                    // Getting the user uid to use it as the document name
                     User? user = FirebaseAuth.instance.currentUser;
                     String? uid = user?.uid;
-                    //print(uid);
-
-                    //Getting the information to store on the user
-                    String selectedYear = _selectedYear;
-                    String selectedDegree = _selectedDegree;
-
-                    //Creating a connection to the firestore and then adding the data
                     final CollectionReference usersCollection =
                         FirebaseFirestore.instance.collection('users');
                     usersCollection.doc(uid).set({

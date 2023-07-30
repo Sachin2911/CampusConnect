@@ -1,3 +1,4 @@
+import 'package:campusconectv2/content/content_add.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import 'package:flutter/material.dart';
 
@@ -19,6 +20,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final screens = [
     const ContentHome(),
     const ContentSearch(),
+    const ContentAdd(),
     const ContentProfile()
   ];
   @override
@@ -26,10 +28,11 @@ class _HomeScreenState extends State<HomeScreen> {
     final items = <Widget>[
       const Icon(Icons.home, size: 30),
       const Icon(Icons.search, size: 30),
+      const Icon(Icons.add, size: 30),
       const Icon(Icons.person, size: 30)
     ];
     return Scaffold(
-      backgroundColor: hexStringToColor("#1835f0"),
+      backgroundColor: hexStringToColor("#0e81ed"),
       body: screens[index],
       // body: Center(
       //   child: ElevatedButton(

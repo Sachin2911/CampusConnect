@@ -1,9 +1,10 @@
+// ignore_for_file: library_private_types_in_public_api, avoid_print, use_build_context_synchronously
+
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 import 'package:geolocator/geolocator.dart';
-import 'package:permission_handler/permission_handler.dart';
 
 class ContentHome extends StatefulWidget {
   const ContentHome({super.key});
@@ -13,17 +14,13 @@ class ContentHome extends StatefulWidget {
 }
 
 class _ContentHomeState extends State<ContentHome> {
-  //Creating set to store markers
-  Set<Marker> _markers = {};
-  final FirebaseAuth _auth = FirebaseAuth.instance;
-  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final Set<Marker> _markers = {};
+  User? user = FirebaseAuth.instance.currentUser;
+
   GoogleMapController? _mapController;
   Position? _currentPosition;
-
-  //Problem with marker load, boolean to force marker load if not true
   bool _markersGenerated = false;
 
-  //Calling the _initializeMap function on build
   @override
   void initState() {
     super.initState();
@@ -41,32 +38,33 @@ class _ContentHomeState extends State<ContentHome> {
   }
 
   void _initializeMap() async {
-    // Fetch the active coordinates
     List<LatLng> coordinates = await _getActiveCoordinates();
-
-    // Generate markers and display them on the map
     _generateMarkers(coordinates);
-
-    // Get the current location and generate circles
     _getCurrentLocation();
   }
 
-  Future<void> _generateMarkers(List<LatLng> coordinates) async {
+  void _generateMarkers(List<LatLng> coordinates) async {
     if (coordinates.isNotEmpty) {
-      // Clear the existing markers before adding new ones
       _markers.clear();
 
+      QuerySnapshot snapshot =
+          await FirebaseFirestore.instance.collection('active').get();
       for (int i = 0; i < coordinates.length; i++) {
-        //Auto generated Marker Id's
         final MarkerId markerId = MarkerId("marker$i");
         final LatLng position = coordinates[i];
-
-        // Getting all the latitude and longitude for each document in active
-        QuerySnapshot snapshot =
-            await FirebaseFirestore.instance.collection('active').get();
+        QueryDocumentSnapshot? matchingDoc;
         for (QueryDocumentSnapshot docSnapshot in snapshot.docs) {
-          String uid = docSnapshot.id;
-          // Fetch the user's name from Firestore using the UID
+          double latitude = docSnapshot['latitude'] ?? 0;
+          double longitude = docSnapshot['longitude'] ?? 0;
+          if (position.latitude == latitude &&
+              position.longitude == longitude) {
+            matchingDoc = docSnapshot;
+            break;
+          }
+        }
+
+        if (matchingDoc != null) {
+          String uid = matchingDoc.id;
           DocumentSnapshot userSnapshot = await FirebaseFirestore.instance
               .collection('users')
               .doc(uid)
@@ -75,26 +73,46 @@ class _ContentHomeState extends State<ContentHome> {
             Map<String, dynamic> userData =
                 userSnapshot.data() as Map<String, dynamic>;
             String name = userData['group'] ?? "Unknown User";
-
             _markers.add(Marker(
               markerId: markerId,
               position: position,
-              onTap: () {
-                setState(() {
-                  _markers = _markers.map((marker) {
-                    if (marker.markerId == markerId) {
-                      return marker.copyWith(
-                        infoWindowParam: InfoWindow(
-                          title: name,
-                          snippet: "Tap to view details",
-                        ),
+              infoWindow: InfoWindow(
+                title: name,
+                snippet: "Tap to view details",
+                onTap: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return AlertDialog(
+                        title: const Text("Join Group"),
+                        content: Text("Do you want to join $name's group?"),
+                        actions: [
+                          TextButton(
+                            onPressed: () {
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Cancel"),
+                          ),
+                          TextButton(
+                            onPressed: () async {
+                              String? uidUser = user?.uid;
+                              print("Join button pressed for $name");
+                              await FirebaseFirestore.instance
+                                  .collection('groups')
+                                  .doc(name)
+                                  .update({
+                                'members': FieldValue.arrayUnion([uidUser])
+                              });
+                              Navigator.pop(context);
+                            },
+                            child: const Text("Join"),
+                          ),
+                        ],
                       );
-                    } else {
-                      return marker.copyWith(infoWindowParam: null);
-                    }
-                  }).toSet();
-                });
-              },
+                    },
+                  );
+                },
+              ),
             ));
           }
         }
@@ -106,31 +124,16 @@ class _ContentHomeState extends State<ContentHome> {
     }
   }
 
-  Future<void> _requestLocationPermissions() async {
-    if (await Permission.location.isGranted) {
-      _getCurrentLocation();
-    } else {
-      final status = await Permission.location.request();
-      if (status.isGranted) {
-        _getCurrentLocation();
-      } else if (status.isDenied) {
-        print("Location permissions denied by the user.");
-      } else if (status.isPermanentlyDenied) {
-        print("Location permissions permanently denied by the user.");
-      }
-    }
-  }
-
   Future<List<LatLng>> _getActiveCoordinates() async {
     List<LatLng> coordinates = [];
     QuerySnapshot snapshot =
         await FirebaseFirestore.instance.collection('active').get();
     if (snapshot.docs.isNotEmpty) {
-      snapshot.docs.forEach((doc) {
+      for (var doc in snapshot.docs) {
         double latitude = doc['latitude'] ?? 0;
         double longitude = doc['longitude'] ?? 0;
         coordinates.add(LatLng(latitude, longitude));
-      });
+      }
     }
     return coordinates;
   }
@@ -199,7 +202,7 @@ class _ContentHomeState extends State<ContentHome> {
                 onPressed: () {
                   _initializeMap();
                 },
-                child: Icon(Icons.refresh),
+                child: const Icon(Icons.refresh),
               ),
             ),
           ),
