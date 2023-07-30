@@ -30,18 +30,12 @@ import com.google.firebase.firestore.FirebaseFirestore;
 
 public class RegistrationActivity extends AppCompatActivity {
 
-    private EditText emailEditText, passwordEditText, firstNameEditText,lastNameEditText,degreeEditText;
+    private EditText emailEditText, passwordEditText, firstNameEditText,lastNameEditText,degreeEditText, studentnrEditText;
     private RadioGroup radGender;
-    private DatabaseReference databaseReference;
-
-
     private TextView signInLink;
     private FirebaseAuth mAuth;
-
     private Button registerButton;
-
     private ProgressBar progressBar;
-
     private FirebaseFirestore firestoreDB;
 
     @Override
@@ -56,13 +50,11 @@ public class RegistrationActivity extends AppCompatActivity {
         // Initialize FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
 
-        // Initialize FirebaseDatabase
-        //databaseReference = FirebaseDatabase.getInstance().getReference("users");
-
         // Initialize UI elements
         firstNameEditText = findViewById(R.id.firstNameEditText);
         lastNameEditText = findViewById(R.id.lastNameEditText);
         degreeEditText = findViewById(R.id.degreeEditText);
+        studentnrEditText = findViewById(R.id.studentnrEditText);
         emailEditText = findViewById(R.id.emailEditText);
         passwordEditText = findViewById(R.id.passwordEditText);
         radGender = findViewById(R.id.radGender);
@@ -70,6 +62,7 @@ public class RegistrationActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         signInLink = findViewById(R.id.signInLink);
 
+        //If registered redirect to login activity
         signInLink.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -92,13 +85,15 @@ public class RegistrationActivity extends AppCompatActivity {
 
     private void registerUser() {
         progressBar.setVisibility(View.VISIBLE);
-        // Get the email and password entered by the user
+        // Get the input fields entered by the user
         String firstName = firstNameEditText.getText().toString().trim();
         String lastName = lastNameEditText.getText().toString().trim();
         String degree = degreeEditText.getText().toString().trim();
+        String studentnr = studentnrEditText.getText().toString().trim();
         String email = emailEditText.getText().toString().trim();
         String password = passwordEditText.getText().toString().trim();
 
+        // Ensure that a radio button is selected before accessing it
         int selectedRadioButtonId = radGender.getCheckedRadioButtonId();
         if (selectedRadioButtonId == -1) {
             // No radio button is selected
@@ -111,8 +106,8 @@ public class RegistrationActivity extends AppCompatActivity {
         RadioButton selectedRadioButton = findViewById(selectedRadioButtonId);
         String yearOfStudy = selectedRadioButton.getText().toString();
 
-        // Validate the input (you can add more validation as per your requirements)
-        if (email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || degree.isEmpty() || yearOfStudy.isEmpty()) {
+        // Validate the input (no blank fields)
+        if (email.isEmpty() || password.isEmpty() || firstName.isEmpty() || lastName.isEmpty() || degree.isEmpty() || yearOfStudy.isEmpty() || studentnr.isEmpty()) {
             progressBar.setVisibility(View.GONE);
             Toast.makeText(this, "Please fill in all fields. 🥹", Toast.LENGTH_SHORT).show();
             return;
@@ -131,7 +126,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                 String userId = user.getUid();
 
                                 // Create a User object
-                                User userData = new User(userId, firstName, lastName, degree, yearOfStudy, email);
+                                User userData = new User(userId, firstName, lastName, degree, yearOfStudy, email, studentnr);
 
                                 // Storing data in Firestore
                                 firestoreDB.collection("users").document(userId).set(userData)
@@ -153,7 +148,7 @@ public class RegistrationActivity extends AppCompatActivity {
                                         });
                             }
                         } else {
-                            // If sign in fails, display a message to the user.
+                            // If registration fails, display a message to the user.
                             Toast.makeText(RegistrationActivity.this, "Something went wrong, check that details are correct.😵‍💫", Toast.LENGTH_SHORT).show();
                         }
                     }

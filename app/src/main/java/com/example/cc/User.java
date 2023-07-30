@@ -7,18 +7,20 @@ public class User {
     private String degree;
     private String yearOfStudy;
     private String email;
+    private String studentnr;
 
     public User() {
         // Empty constructor required for Firebase
     }
 
-    public User(String userId, String firstName, String lastName, String degree, String yearOfStudy, String email) {
+    public User(String userId, String firstName, String lastName, String degree, String yearOfStudy, String email, String studentnr) {
         this.userId = userId;
         this.firstName = firstName;
         this.lastName = lastName;
         this.degree = degree;
         this.yearOfStudy = yearOfStudy;
         this.email = email;
+        this.studentnr = studentnr;
     }
 
     public String getUserId() {
@@ -69,4 +71,11 @@ public class User {
         this.lastName = lastName;
     }
 
+    public String getStudentnr() {
+        return studentnr;
+    }
+
+    public void setStudentnr(String studentnr) {
+        this.studentnr = studentnr;
+    }
 }

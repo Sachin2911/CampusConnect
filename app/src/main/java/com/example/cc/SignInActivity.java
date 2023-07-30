@@ -34,6 +34,7 @@ public class SignInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.login);
+        // Initialize FirebaseAuth
         mAuth = FirebaseAuth.getInstance();
 
         // Initialize UI elements
@@ -43,6 +44,7 @@ public class SignInActivity extends AppCompatActivity {
         progressBar = findViewById(R.id.progressBar);
         register = findViewById(R.id.createAccount);
 
+        // If not registered redirect to registration activity
         register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
