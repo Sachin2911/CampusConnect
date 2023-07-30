@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">Basics</string>
+    <string name="app_name">Campus Connect</string>
 
     <string name="nav_open">Open Navigation Bar</string>
     <string name="nav_close">Close Navigation Bar</string>

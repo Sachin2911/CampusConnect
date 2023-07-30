@@ -6,20 +6,29 @@
         <item android:id="@+id/another"
             android:title="Profile"
             android:icon="@drawable/profile"/>
+        <item android:id="@+id/Maps"
+            android:title="Maps"
+            android:icon="@drawable/baseline_add_location_alt_24"/>
         <item android:id="@+id/session"
-            android:title="Find Session"
+            android:title="Find Group"
             android:icon="@drawable/nav_session"/>
+        <item android:id="@+id/Create"
+            android:title="Create Group"
+            android:icon="@drawable/nav_createsesh"/>
         <item android:id="@+id/group"
             android:title="Study Group"
             android:icon="@drawable/nav_study_group"/>
     </group>
 
-    <item android:title="@+id/test">
+    <item android:title="">
         <menu>
             <item android:id="@+id/logout"
                 android:title="logout"
-                android:icon="@drawable/nav_logout"/>
+                android:icon="@drawable/nav_logout"
+                android:actionLayout="@layout/fragment_logout"/>
         </menu>
     </item>
+
+
 
 </menu>
