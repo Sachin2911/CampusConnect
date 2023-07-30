@@ -1,17 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#36454F"
+    android:gravity="center_horizontal|center_vertical"
+    android:layout_gravity="center_vertical"
     tools:context=".AnotherFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Another Fragment"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"
-        android:textColor="@color/black"/>
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="wrap_content">
 
-</RelativeLayout>
+        <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:src="@drawable/im_profile"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="300dp"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:background="@drawable/baseline_account_circle_24"
+        android:drawablePadding="20dp"
+        android:minWidth="48dp"
+        android:minHeight="48dp"
+        android:gravity="center_vertical">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_name"
+            android:layout_gravity="center"
+            android:paddingTop="5dp"
+            android:paddingBottom="10dp"
+            android:text="Name"
+            android:textColor="@color/black"
+            android:textSize="30dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_degree"
+            android:layout_gravity="center"
+            android:text="Degree"
+            android:paddingBottom="10dp"
+            android:textColor="@color/black"
+            android:textSize="30dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/profile_yos"
+            android:layout_gravity="center"
+            android:text="Year of Study"
+            android:paddingBottom="10dp"
+            android:textColor="@color/black"
+            android:textSize="30dp"/>
+
+
+    </LinearLayout>
+
+</LinearLayout>
