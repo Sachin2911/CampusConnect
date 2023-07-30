@@ -9,11 +9,15 @@ import androidx.fragment.app.Fragment;
 
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.appcompat.widget.Toolbar;
+import androidx.fragment.app.FragmentManager;
 //import android.widget.Toolbar;
 
 import com.google.android.material.navigation.NavigationView;
@@ -22,8 +26,6 @@ import com.google.android.material.navigation.NavigationView;
 public class MainActivity extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
 
     private DrawerLayout drawerLayout;
-    public RelativeLayout rl;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,18 +55,29 @@ public class MainActivity extends AppCompatActivity  implements NavigationView.O
                 break;
             case R.id.session:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new SessionFragment()).commit();
-                rl = findViewById(R.id.sesh);
-                TextView textView = new TextView(this);
-                textView.setText("Motherfucker");
-                RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
-                lp.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                rl.addView(textView, lp);
                 break;
             case R.id.group:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new StudyGroup()).commit();
                 break;
             case R.id.logout:
                 getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new Logout()).commit();
+                try {
+                    Thread.sleep(2000);
+                    Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.fragment_container);
+                    Bundle bundle = new Bundle();
+                    bundle.putString("msg","Hello");
+                    getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new StudyGroup()).commit();
+                    break;
+                } catch (InterruptedException e) {
+                    throw new RuntimeException(e);
+                }
+
+                //Bundle result = new Bundle();
+                //result.putString("msg","Exited");
+                //getSupportFragmentManager().beginTransaction();
+                //getSupportFragmentManager().setFragmentResult("logout", result);
+            case R.id.Create:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new CreateGroupFragment()).commit();
                 break;
         }
         drawerLayout.closeDrawer(GravityCompat.START);
